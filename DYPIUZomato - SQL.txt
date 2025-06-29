@@ -1,0 +1,69 @@
+-- Create the database
+CREATE DATABASE IF NOT EXISTS DYPIUZomato;
+USE  DYPIUZomato;
+
+-- CUSTOMER Table
+CREATE TABLE CUSTOMER (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
+    First_name VARCHAR(50) NOT NULL,
+    Middle_name VARCHAR(50),
+    Last_name VARCHAR(50) NOT NULL,
+    email_id VARCHAR(100) NOT NULL,
+    mobile_no VARCHAR(15) NOT NULL
+);
+
+-- RESTAURANT Table
+CREATE TABLE RESTAURANT (
+    restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
+    restaurant_name VARCHAR(100) NOT NULL,
+    location VARCHAR(100)
+);
+
+-- MENU Table
+CREATE TABLE MENU (
+    food_id INT AUTO_INCREMENT PRIMARY KEY,
+    food_name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    restaurant_id INT,
+    description VARCHAR(255),
+    FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT(restaurant_id) ON DELETE CASCADE
+);
+
+-- DELIVERY_PARTNERS Table
+CREATE TABLE DELIVERY_PARTNERS (
+    id_number INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    contact VARCHAR(20)
+);
+
+-- ORDERS Table
+CREATE TABLE ORDERS (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_time TIME,
+    order_date DATE,
+    total_amount DECIMAL(10, 2),
+    delivery_time VARCHAR(50),
+    customer_id INT,
+    id_number INT,
+    restaurant_id INT,
+    FOREIGN KEY (customer_id) REFERENCES CUSTOMER(customer_id),
+    FOREIGN KEY (id_number) REFERENCES DELIVERY_PARTNERS(id_number),
+    FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT(restaurant_id)
+);
+
+-- PAYMENT Table
+CREATE TABLE PAYMENT (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    payment_method VARCHAR(50),
+    amount DECIMAL(10, 2),
+    customer_id INT,
+    order_id INT,
+    restaurant_id INT,
+    FOREIGN KEY (customer_id) REFERENCES CUSTOMER(customer_id),
+    FOREIGN KEY (order_id) REFERENCES ORDERS(order_id),
+    FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT(restaurant_id)
+);
+
+
